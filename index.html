@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kooora IQ IPTV</title>
-    <!-- استدعاء مشغل الفيديو الاحترافي Video.js لتشغيل روابط m3u8 المباشرة -->
     <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
     <style>
         body {
@@ -74,25 +73,22 @@
     <h1>Kooora IQ IPTV</h1>
 
     <div class="container">
-        <!-- قسم مشغل الفيديو -->
         <div class="video-container">
             <video id="my-video" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" width="100%" height="450px" data-setup="{}">
                 <p class="vjs-no-js">عذراً، متصفحك لا يدعم تشغيل هذا الفيديو.</p>
             </video>
         </div>
 
-        <!-- قسم عرض القنوات المجلوبة من الجيسون -->
         <div id="playlist" class="channels-list">
             <p style="text-align:center;">جاري تحميل القنوات...</p>
         </div>
     </div>
 
-    <!-- مكتبات تشغيل البث المباشر -->
     <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
     
     <script>
-        // ضع هنا رابط ملف الـ JSON المباشر (Raw) الذي رفعته على GitHub
-        const jsonUrl = 'https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/channels.json';
+        // تم استبدال الرابط برابط الـ JSON المباشر (Raw) الخاص بحسابك بدقة
+        const jsonUrl = 'https://raw.githubusercontent.com/n911t/iptv-list/main/channels.json';
         
         let player = videojs('my-video');
         let currentFocusIndex = 0;
