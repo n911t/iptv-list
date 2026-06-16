@@ -1,38 +1,4 @@
-[
-  {
+{
     "name": "قناة رياضية 1",
     "url": "https://tv.kooraiq.com:4433/beIN_sport1/tracks-v1a1/mono.m3u8"
   },
-  {
-    "name": "قناة رياضية 2",
-    "url": "https://tv.kooraiq.com/#channel/18"
-  },
-  {
-    "name": "قناة رياضية 3",
-    "url": "https://tv.kooraiq.com/#channel/19"
-  },
-  {
-    "name": "قناة رياضية 4",
-    "url": "https://tv.kooraiq.com/#channel/20"
-  },
-  {
-    "name": "قناة رياضية 5",
-    "url": "https://tv.kooraiq.com/#channel/25"
-  },
-  {
-    "name": "قناة رياضية 6",
-    "url": "https://tv.kooraiq.com/#channel/46109"
-  },
-  {
-    "name": "قناة رياضية 7",
-    "url": "https://tv.kooraiq.com/#channel/46117"
-  },
-  {
-    "name": "قناة رياضية 8",
-    "url": "https://tv.kooraiq.com/#channel/46125"
-  },
-  {
-    "name": "قناة رياضية 9",
-    "url": "https://tv.kooraiq.com/#channel/46433"
-  }
-]
