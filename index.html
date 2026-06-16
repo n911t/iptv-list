@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kooora IQ IPTV</title>
+    <!-- استدعاء مشغل الفيديو الاحترافي Video.js لتشغيل روابط m3u8 المباشرة -->
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #0c111b;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #2196F3;
+            margin-bottom: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: row-reverse;
+            width: 100%;
+            max-width: 1200px;
+            gap: 20px;
+        }
+        /* مشغل الفيديو */
+        .video-container {
+            flex: 2;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        /* قائمة القنوات المجهزة للشاشات */
+        .channels-list {
+            flex: 1;
+            max-height: 500px;
+            overflow-y: auto;
+            background: #141a29;
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        /* تصميم زر القناة ودعم التركيز بالريموت */
+        .channel-item {
+            background: #1f273a;
+            border: 2px solid transparent;
+            color: #fff;
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: right;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            outline: none; /* إخفاء إطار المتصفح الافتراضي */
+        }
+        /* هذا الجزء هو الأهم لتتحرك القنوات عند الضغط بالريموت */
+        .channel-item:focus, .channel-item:hover {
+            background: #2196F3;
+            border-color: #ffffff;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Kooora IQ IPTV</h1>
+
+    <div class="container">
+        <!-- قسم مشغل الفيديو -->
+        <div class="video-container">
+            <video id="my-video" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" width="100%" height="450px" data-setup="{}">
+                <p class="vjs-no-js">عذراً، متصفحك لا يدعم تشغيل هذا الفيديو.</p>
+            </video>
+        </div>
+
+        <!-- قسم عرض القنوات المجلوبة من الجيسون -->
+        <div id="playlist" class="channels-list">
+            <p style="text-align:center;">جاري تحميل القنوات...</p>
+        </div>
+    </div>
+
+    <!-- مكتبات تشغيل البث المباشر -->
+    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+    
+    <script>
+        // ضع هنا رابط ملف الـ JSON المباشر (Raw) الذي رفعته على GitHub
+        const jsonUrl = 'https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/channels.json';
+        
+        let player = videojs('my-video');
+        let currentFocusIndex = 0;
+
+        // 1. جلب بيانات القنوات من رابط الجيسون المربوط بصفحة كورة عراقي
+        async function loadChannels() {
+            try {
+                const response = await fetch(jsonUrl);
+                const channels = await response.json();
+                const playlistDiv = document.getElementById('playlist');
+                playlistDiv.innerHTML = ''; // تفريغ نص التحميل
+
+                channels.forEach((channel, index) => {
+                    const button = document.createElement('button');
+                    button.className = 'channel-item';
+                    button.innerText = channel.name;
+                    button.setAttribute('data-url', channel.url);
+                    button.tabIndex = index + 1; // لتمكين التنقل بالريموت
+
+                    // عند الضغط على القناة (بالماوس أو زر OK بالريموت)
+                    button.addEventListener('click', () => {
+                        playStream(channel.url);
+                    });
+
+                    playlistDiv.appendChild(button);
+                });
+
+                // تفعيل التركيز على أول قناة تلقائياً عند فتح التطبيق
+                if(channels.length > 0) {
+                    document.querySelectorAll('.channel-item')[0].focus();
+                }
+
+                // تفعيل التحكم بالريموت بعد بناء الأزرار
+                setupRemoteControl();
+
+            } catch (error) {
+                console.error("خطأ في جلب ملف القنوات:", error);
+                document.getElementById('playlist').innerHTML = '<p style="color:red; text-align:center;">فشل تحميل القنوات، تأكد من ملف الـ JSON</p>';
+            }
+        }
+
+        // 2. دالة تشغيل رابط البث المباشر داخل المشغل
+        function playStream(url) {
+            player.src({
+                src: url,
+                type: 'application/x-mpegURL' // تشغيل صيغ m3u8 و hls الاحترافية
+            });
+            player.play();
+        }
+
+        // 3. برمجة أزرار ريموت الشاشة (أعلى، أسفل، OK)
+        function setupRemoteControl() {
+            const items = document.querySelectorAll('.channel-item');
+            
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowDown') { // زر الأسفل بالريموت
+                    if (currentFocusIndex < items.length - 1) {
+                        currentFocusIndex++;
+                        items[currentFocusIndex].focus();
+                        items[currentFocusIndex].scrollIntoView({ block: 'nearest' });
+                    }
+                } else if (e.key === 'ArrowUp') { // زر الأعلى بالريموت
+                    if (currentFocusIndex > 0) {
+                        currentFocusIndex--;
+                        items[currentFocusIndex].focus();
+                        items[currentFocusIndex].scrollIntoView({ block: 'nearest' });
+                    }
+                }
+            });
+        }
+
+        // تشغيل الدالة فور فتح الصفحة
+        loadChannels();
+    </script>
+</body>
+</html>
