@@ -243,6 +243,32 @@
         </div>
     </div>
 
+    <!-- اللوحة الإعلانية (Modal) لتحميل VLC -->
+    <div id="vlcModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 backdrop-blur-xl p-4 transition-all">
+        <div class="bg-slate-900 p-6 rounded-[2.5rem] text-center w-full max-w-sm border border-white/10 shadow-2xl relative">
+            <button onclick="closeVlcModal()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition z-10">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="w-16 h-16 bg-orange-500/10 border border-orange-500/30 rounded-full flex items-center justify-center mx-auto mb-4 text-orange-500 text-3xl">
+                <i class="fas fa-play-circle"></i>
+            </div>
+            <h3 class="text-white font-black text-xl mb-3">تنبيه المشغل!</h3>
+            <p class="text-sm text-gray-300 leading-relaxed font-bold mb-6 px-2">
+                هذه القنوات تتطلب مشغل <b>VLC Player</b> لتعمل بدون تقطيع. الرجاء تحميل التطبيق من المتجر الخاص بجهازك لتتمكن من المشاهدة.
+            </p>
+            <div class="space-y-3">
+                <a href="https://play.google.com/store/apps/details?id=org.videolan.vlc" target="_blank" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-black py-3.5 rounded-2xl shadow-lg transition transform active:scale-95 flex items-center justify-center gap-2">
+                    <i class="fab fa-google-play text-lg"></i>
+                    Google Play (أندرويد)
+                </a>
+                <a href="https://apps.apple.com/app/vlc-media-player/id650377962" target="_blank" class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-black py-3.5 rounded-2xl shadow-lg transition transform active:scale-95 flex items-center justify-center gap-2">
+                    <i class="fab fa-apple text-lg"></i>
+                    App Store (آيفون)
+                </a>
+            </div>
+        </div>
+    </div>
+
     <div class="relative z-20 max-w-md mx-auto px-4 pt-10">
         
         <div id="mainHeaderCard" class="glass-panel rounded-3xl p-6 text-center mb-6 theme-transition shadow-lg backdrop-blur-md bg-white/5 border border-white/10">
@@ -311,7 +337,7 @@
 
         <div id="appsContainer" class="space-y-4">
 
-            <!-- باقة قنوات Bein Max المنسدلة والمجهزة بالروابط المباشرة مالتك بالكامل -->
+            <!-- باقة قنوات Bein Max بالبطاقات المنفصلة العامودية -->
             <div id="watch-bein-max-container" data-mode="watch" class="app-item rounded-2xl group theme-transition overflow-hidden bg-slate-900/60 border border-white/10">
                 <button onclick="toggleBeinChannels()" class="w-full flex items-center p-3 text-right focus:outline-none">
                     <div class="w-14 h-14 flex items-center justify-center text-2xl shadow-lg shrink-0 rounded-2xl bg-gradient-to-br from-red-500 to-orange-500 text-white group-hover:scale-105 transition duration-300">
@@ -319,33 +345,45 @@
                     </div>
                     <div class="mr-4 flex-1">
                         <h3 class="font-bold text-lg text-red-100 group-hover:text-white transition">مشاهدة قنوات Bein Max</h3>
-                        <p class="text-xs text-red-300/80">قنوات رياضية - بث مباشر مدمج بدون مشغل خارجي</p>
-                    </div>
-                    <div class="ml-2 text-gray-400">
-                        <i id="beinChevron" class="fas fa-chevron-down transition-transform duration-300"></i>
+                        <p class="text-xs text-red-300/80">انقر هنا لفتح قائمة القنوات</p>
                     </div>
                 </button>
                 
-                <div id="beinChannelsList" class="hidden border-t border-white/5 bg-slate-950/40 divide-y divide-white/5 font-bold text-sm">
-                    <button onclick="playLiveChannel('Bein Sport Max 1', 'https://ostv-11-99.xyz/mx1/1080p/index.m3u8|User-Agent=TDMv2.0.3')" class="w-full text-right p-3 px-6 hover:bg-white/5 text-gray-200 hover:text-white flex items-center justify-between transition">
-                        <span><i class="fas fa-play-circle text-red-500 ml-2"></i> bein sport max 1</span>
-                        <span class="text-xs px-2 py-0.5 bg-red-500/20 text-red-400 border border-red-500/30 rounded-full">FHD</span>
+                <div id="beinChannelsList" class="hidden flex-col gap-2 p-3 border-t border-white/10 bg-black/20">
+                    <button onclick="playInVLC('https://ostv-11-99.xyz/mx1/1080p/index.m3u8')" class="w-full flex items-center justify-between p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all active:scale-95 shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-500/20 text-red-400"><i class="fas fa-play"></i></span>
+                            <span class="font-bold text-sm text-gray-200">beIN SPORT MAX 1</span>
+                        </div>
+                        <span class="text-[10px] font-black px-2.5 py-1 bg-white/10 text-gray-300 border border-white/10 rounded uppercase tracking-widest">VLC</span>
                     </button>
-                    <button onclick="playLiveChannel('Bein Sport Max 2', 'https://watch.ostv-11-66.xyz:8443/live/egy456321/6543132/872.m3u8|User-Agent=TDMv2.0.3')" class="w-full text-right p-3 px-6 hover:bg-white/5 text-gray-200 hover:text-white flex items-center justify-between transition">
-                        <span><i class="fas fa-play-circle text-red-500 ml-2"></i> bein sport max 2</span>
-                        <span class="text-xs px-2 py-0.5 bg-red-500/20 text-red-400 border border-red-500/30 rounded-full">FHD</span>
+                    <button onclick="playInVLC('https://watch.ostv-11-66.xyz:8443/live/egy456321/6543132/872.m3u8')" class="w-full flex items-center justify-between p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all active:scale-95 shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-500/20 text-red-400"><i class="fas fa-play"></i></span>
+                            <span class="font-bold text-sm text-gray-200">beIN SPORT MAX 2</span>
+                        </div>
+                        <span class="text-[10px] font-black px-2.5 py-1 bg-white/10 text-gray-300 border border-white/10 rounded uppercase tracking-widest">VLC</span>
                     </button>
-                    <button onclick="playLiveChannel('Bein Sport Max 3', 'https://ostv-11-99.xyz/mx3/1080p/index.m3u8|User-Agent=TDMv2.0.3')" class="w-full text-right p-3 px-6 hover:bg-white/5 text-gray-200 hover:text-white flex items-center justify-between transition">
-                        <span><i class="fas fa-play-circle text-red-500 ml-2"></i> bein sport max 3</span>
-                        <span class="text-xs px-2 py-0.5 bg-red-500/20 text-red-400 border border-red-500/30 rounded-full">FHD</span>
+                    <button onclick="playInVLC('https://ostv-11-99.xyz/mx3/1080p/index.m3u8')" class="w-full flex items-center justify-between p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all active:scale-95 shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-500/20 text-red-400"><i class="fas fa-play"></i></span>
+                            <span class="font-bold text-sm text-gray-200">beIN SPORT MAX 3</span>
+                        </div>
+                        <span class="text-[10px] font-black px-2.5 py-1 bg-white/10 text-gray-300 border border-white/10 rounded uppercase tracking-widest">VLC</span>
                     </button>
-                    <button onclick="playLiveChannel('Bein Sport Max 4', 'https://watch.ostv-11-66.xyz:8443/live/egy456321/6543132/896.m3u8|User-Agent=TDMv2.0.3')" class="w-full text-right p-3 px-6 hover:bg-white/5 text-gray-200 hover:text-white flex items-center justify-between transition">
-                        <span><i class="fas fa-play-circle text-red-500 ml-2"></i> bein sport max 4</span>
-                        <span class="text-xs px-2 py-0.5 bg-red-500/20 text-red-400 border border-red-500/30 rounded-full">FHD</span>
+                    <button onclick="playInVLC('https://watch.ostv-11-66.xyz:8443/live/egy456321/6543132/896.m3u8')" class="w-full flex items-center justify-between p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all active:scale-95 shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-500/20 text-red-400"><i class="fas fa-play"></i></span>
+                            <span class="font-bold text-sm text-gray-200">beIN SPORT MAX 4</span>
+                        </div>
+                        <span class="text-[10px] font-black px-2.5 py-1 bg-white/10 text-gray-300 border border-white/10 rounded uppercase tracking-widest">VLC</span>
                     </button>
-                    <button onclick="playLiveChannel('Bein Sport Max 6', 'https://watch.ostv-11-66.xyz:8443/live/egy456321/6543132/917.m3u8|User-Agent=TDMv2.0.3')" class="w-full text-right p-3 px-6 hover:bg-white/5 text-gray-200 hover:text-white flex items-center justify-between transition">
-                        <span><i class="fas fa-play-circle text-red-500 ml-2"></i> bein sport max 6</span>
-                        <span class="text-xs px-2 py-0.5 bg-red-500/20 text-red-400 border border-red-500/30 rounded-full">FHD</span>
+                    <button onclick="playInVLC('https://watch.ostv-11-66.xyz:8443/live/egy456321/6543132/917.m3u8')" class="w-full flex items-center justify-between p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all active:scale-95 shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-500/20 text-red-400"><i class="fas fa-play"></i></span>
+                            <span class="font-bold text-sm text-gray-200">beIN SPORT MAX 6</span>
+                        </div>
+                        <span class="text-[10px] font-black px-2.5 py-1 bg-white/10 text-gray-300 border border-white/10 rounded uppercase tracking-widest">VLC</span>
                     </button>
                 </div>
             </div>
@@ -1268,17 +1306,37 @@
             document.getElementById('shortcutInstructions').classList.remove('hidden');
         });
 
-        // دالة فتح وغلق قائمة قنوات بين سبورت
+        // دالة فتح وغلق قائمة قنوات بين سبورت مع التعديل للوضع العامودي
         function toggleBeinChannels() {
             const list = document.getElementById('beinChannelsList');
-            const chevron = document.getElementById('beinChevron');
             if (list.classList.contains('hidden')) {
                 list.classList.remove('hidden');
-                chevron.classList.add('rotate-180');
+                list.classList.add('flex');
             } else {
                 list.classList.add('hidden');
-                chevron.classList.remove('rotate-180');
+                list.classList.remove('flex');
             }
+        }
+
+        // دالة فتح الرابط عبر مشغل VLC
+        function playInVLC(url) {
+            var vlcUrl = "vlc://" + url;
+            var now = Date.now();
+            
+            // محاولة فتح التطبيق
+            window.location.href = vlcUrl;
+            
+            // التحقق بعد ثانية: إذا لم يتم فتح التطبيق، إظهار اللوحة الإعلانية لتحميل المشغل
+            setTimeout(function () {
+                if (Date.now() - now < 1500) {
+                    document.getElementById('vlcModal').classList.remove('hidden');
+                }
+            }, 1000);
+        }
+
+        // دالة إغلاق لوحة إعلانات مشغل VLC
+        function closeVlcModal() {
+            document.getElementById('vlcModal').classList.add('hidden');
         }
 
         // دالة تشغيل البث المباشر داخل مشغل الصفحة نفسه (Inline Player)
